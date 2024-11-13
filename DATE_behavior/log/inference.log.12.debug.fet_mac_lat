@@ -1,0 +1,130 @@
+x.shape
+torch.Size([1, 512, 768])
+input_ids have 23 tokens
+word embedding token fetch output: latency=0.0, energy=0
+w_q.weight
+Parameter containing:
+tensor([[-0.0062,  0.0240,  0.0162,  ...,  0.0069,  0.0087, -0.0079],
+        [-0.0204, -0.0197, -0.0109,  ..., -0.0149,  0.0093,  0.0144],
+        [ 0.0299,  0.0067, -0.0124,  ...,  0.0099,  0.0332, -0.0207],
+        ...,
+        [-0.0169, -0.0135, -0.0221,  ...,  0.0178, -0.0010, -0.0283],
+        [-0.0337,  0.0313,  0.0034,  ..., -0.0019,  0.0063, -0.0292],
+        [-0.0260,  0.0341,  0.0112,  ...,  0.0306,  0.0277, -0.0294]],
+       requires_grad=True)
+w_q.shape
+torch.Size([768, 768])
+fet_mac_lat: 1.1 fet_mac_en: 60.72
+debug fet_mac: xbar_count: 1152.0 wl_count: 512 lat_operation_count: 512 en_operation_count: 589824.0 fet_mac_lat: 1.1 fet_mac_en: 60.72
+fet_mac_lat: 1.1 fet_mac_en: 60.72
+debug fet_mac: xbar_count: 1152.0 wl_count: 512 lat_operation_count: 512 en_operation_count: 589824.0 fet_mac_lat: 1.1 fet_mac_en: 60.72
+fet_mac_lat: 1.1 fet_mac_en: 60.72
+debug fet_mac: xbar_count: 1152.0 wl_count: 512 lat_operation_count: 512 en_operation_count: 589824.0 fet_mac_lat: 1.1 fet_mac_en: 60.72
+lat,en: fet mac output compute q,k,v
+0.0016896 0.10744233984
+Operation1: Latency and energy from MUL of X and W_Q, W_K, W_V: 
+0.0016896 ms and 0.10744233984 mJ
+query.shape
+torch.Size([1, 512, 768])
+query.shape
+torch.Size([1, 12, 512, 64])
+lat,en: after cap_bl_to_sa_wr_rm: q,k,v write
+0.003993600000000001 0.10745081856
+Operation2: cap_write q,k,v: 
+Latency = 0.002304 and Energy = 8.478719999983907e-06
+cap_mac_lat: 1.1 cap_mac_en: 71.07
+debug cap_mac: xbar_count: 64.0 wl_count: 512 lat_operation_count: 6144 en_operation_count: 393216.0 cap_mac_lat: 1.1 cap_mac_en: 71.07
+lat,en: after qkt mac computation
+0.010752 0.13539667967999997
+Operation3: cap mac QK_T: 
+Latency = 0.0067583999999999995 and Energy = 0.02794586111999999
+attention_scores.shape
+torch.Size([1, 12, 512, 512])
+qk_t write output: lat,en
+0.016896 0.13541928959999996
+softmax output: lat,en
+0.016896 0.13541928959999996
+
+
+Operation4: Softmax and writing QK_T together:  
+Latency = 0.006144 and Energy = 2.2609919999986888e-05
+attention_scores.shape
+torch.Size([1, 12, 512, 512])
+cap_mac_lat: 1.1 cap_mac_en: 71.07
+debug cap_mac: xbar_count: 64.0 wl_count: 512 lat_operation_count: 6144 en_operation_count: 393216.0 cap_mac_lat: 1.1 cap_mac_en: 71.07
+qkt*v output: lat,en
+0.023654400000000003 0.16336515071999996
+Operation5: CAP-MAC Softmax output*V computation:  
+Latency = 0.006758400000000001 and Energy = 0.027945861120000005
+
+
+attention_matrix.shape
+torch.Size([1, 12, 512, 64])
+after writing soft(qkt)*v
+0.0236864 0.16336797695999997
+
+
+fet_mac_lat: 1.1 fet_mac_en: 60.72
+debug fet_mac: xbar_count: 1152.0 wl_count: 512 lat_operation_count: 512 en_operation_count: 589824.0 fet_mac_lat: 1.1 fet_mac_en: 60.72
+MHA output lat,en results
+0.024249600000000003 0.19918209023999997
+Operation6: FET MAC: Multiplication with W_O:  
+Latency = 0.0005632000000000007 and Energy = 0.035814113280000004
+
+
+attention_matrix.shape
+torch.Size([1, 512, 768])
+After writing MHA output to the FET: lat,en
+0.025529600000000003 0.19918414848
+add_dram: lat,en
+0.025529600000000003 0.19918414848
+
+
+layernorm output1 shape:
+torch.Size([1, 512, 768])
+after writing the output of the x+mha_output in the fet: lat,en
+0.026809600000000003 0.19918620672
+
+
+ff1 layer output shape:
+torch.Size([1, 512, 3072])
+fet_mac_lat: 1.1 fet_mac_en: 60.72
+batch: 1, seq_len: 512, ff_hidden_dim: 3072, d_model: 768
+debug fet_mac: xbar_count: 4608.0 wl_count: 512 lat_operation_count: 512 en_operation_count: 2359296.0 fet_mac_lat: 1.1 fet_mac_en: 60.72
+ff1 mac output: lat,en
+0.027372800000000003 0.34244265984000005
+Operation7: FET MAC FF1:  
+Latency = 0.0005632000000000007 and Energy = 0.14325645312000004
+ff1 mac output FET write: lat,en
+0.028652800000000003 0.3424508928
+
+
+ff_relu shape:
+torch.Size([1, 512, 3072])
+fet_mac_lat: 1.1 fet_mac_en: 60.72
+batch: 1, seq_len: 512, ff_hidden_dim: 3072, d_model: 768
+debug fet_mac: xbar_count: 4608.0 wl_count: 512 lat_operation_count: 512 en_operation_count: 2359296.0 fet_mac_lat: 1.1 fet_mac_en: 60.72
+FF2 mac operation output: lat,en
+0.029216000000000002 0.48570734592000003
+Operation8: FET MAC FF2:  
+Latency = 0.0005632000000000007 and Energy = 0.14325645312000002
+ff2 mac output FET write: lat,en
+0.030496000000000002 0.48570940416
+
+
+ff_out.shape
+torch.Size([1, 512, 768])
+torch.Size([1, 512, 768])
+Encoder layer output: add_dram x+ff2 : lat,en
+0.030496000000000002 0.48570940416
+Encoder output write FET: lat,en
+0.031776000000000006 0.4857114624
+
+
+lat_before_mha,lat_after_mha,lat_after_encoder
+0.0 0.0236864 0.031776000000000006
+en_before_mha,en_after_mha,en_after_encoder
+0.0 0.16336797695999997 0.4857114624
+
+
+end_to_end_latency is 0.38131200000000004 and end_to_end_energy is 5.8285375488

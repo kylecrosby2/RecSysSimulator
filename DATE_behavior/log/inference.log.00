@@ -1,0 +1,114 @@
+DatasetDict({
+    train: Dataset({
+        features: ['id', 'translation'],
+        num_rows: 32332
+    })
+})
+{'id': '0', 'translation': {'en': 'Source: Project Gutenberg', 'it': 'Source: www.liberliber.it/Audiobook available here'}}
+{'en': 'Source: Project Gutenberg', 'it': 'Source: www.liberliber.it/Audiobook available here'}
+Source: Project Gutenberg
+<class 'dict'>
+{'en': 'Source: Project Gutenberg', 'it': 'Source: www.liberliber.it/Audiobook available here'}
+tokenized_datasets ---->>
+{'input_ids': tensor([[  101,  3120,  1024,  2622,  9535, 11029,   102,  3120,  1024,  7479,
+          1012,  5622,  5677, 29521,  2121,  1012,  2009,  1013,  5746,  8654,
+          2800,  2182,   102,     0,     0,     0,     0,     0,     0,     0,
+             0,     0]]), 'token_type_ids': tensor([[0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+         0, 0, 0, 0, 0, 0, 0, 0]]), 'attention_mask': tensor([[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+         0, 0, 0, 0, 0, 0, 0, 0]])}
+torch.Size([1, 32])
+torch.Size([1, 32])
+torch.Size([1, 32])
+tensor(29521)
+x.shape
+torch.Size([1, 32, 768])
+input embedding write: 
+tensor([[[-0.4085, -0.8246, -0.5313,  ..., -0.3950,  1.9709,  0.9638],
+         [-0.7026,  0.5759, -0.5441,  ..., -1.5789,  0.8184, -0.0025],
+         [ 2.1983, -0.3966,  1.1268,  ...,  1.4161, -0.8482,  0.4517],
+         ...,
+         [ 0.3445, -0.3723, -0.7555,  ...,  1.3500, -0.1666,  0.2453],
+         [ 0.3445, -0.3723, -0.7555,  ...,  1.3500, -0.0000,  0.2453],
+         [ 0.3445, -0.3723, -0.7555,  ...,  1.3500, -0.1666,  0.2453]]],
+       grad_fn=<MulBackward0>)
+lat,en: cap_in_write output after writing x and pe
+96 96
+lat,en: add_cap_to_fet: output after adding x and pe and writing xpe
+144 144
+lat,en: after writing xpe in FET
+192 192
+w_q.weight
+Parameter containing:
+tensor([[-0.0183,  0.0043, -0.0341,  ...,  0.0348, -0.0331, -0.0323],
+        [ 0.0011, -0.0159, -0.0097,  ...,  0.0214, -0.0136, -0.0352],
+        [ 0.0089, -0.0106,  0.0242,  ...,  0.0231, -0.0121,  0.0197],
+        ...,
+        [-0.0050, -0.0184,  0.0178,  ..., -0.0180,  0.0028,  0.0280],
+        [ 0.0081, -0.0087,  0.0105,  ...,  0.0283,  0.0071, -0.0192],
+        [ 0.0297,  0.0270,  0.0154,  ...,  0.0243, -0.0081,  0.0350]],
+       requires_grad=True)
+w_q.shape
+torch.Size([768, 768])
+lat,en: fet mac output compute q,k,v
+10617024.0 10617024.0
+query.shape
+torch.Size([1, 32, 768])
+query.shape
+torch.Size([1, 12, 32, 64])
+lat,en: after cap_bl_to_sa_wr_rm: q,k,v write
+10617168.0 10617168.0
+lat,en: after qkt mac computation
+10764624.0 10764624.0
+attention_scores.shape
+torch.Size([1, 12, 32, 32])
+qk_t write output: lat,en
+10764648.0 10764648.0
+softmax output: lat,en
+10862952.0 10862952.0
+attention_scores.shape
+torch.Size([1, 12, 32, 32])
+qkt*v output: lat,en
+10936680.0 10936680.0
+attention_matrix.shape
+torch.Size([1, 12, 32, 64])
+after writing soft(qkt)*v
+10936728.0 10936728.0
+MHA output lat,en results
+14475672.0 14475672.0
+attention_matrix.shape
+torch.Size([1, 32, 768])
+After writing MHA output to the FET: lat,en
+14475720.0 14475720.0
+add_dram: lat,en
+14672328.0 14672328.0
+layernorm output1 shape:
+torch.Size([1, 32, 768])
+after writing the output of the x+mha_output in the fet: lat,en
+14672376.0 14672376.0
+ff1 layer output shape:
+torch.Size([1, 32, 3072])
+ff1 mac output: lat,en
+28828152.0 28828152.0
+ff1 mac output FET write: lat,en
+28828344.0 28828344.0
+ff_relu shape:
+torch.Size([1, 32, 3072])
+FF2 mac operation output: lat,en
+42984120.0 42984120.0
+ff2 mac output FET write: lat,en
+42984168.0 42984168.0
+ff_out.shape
+torch.Size([1, 32, 768])
+torch.Size([1, 32, 768])
+Encoder layer output: add_dram x+ff2 : lat,en
+43180776.0 43180776.0
+Encoder output write FET: lat,en
+43180824.0 43180824.0
+Encoder layer output shape:
+torch.Size([1, 32, 768])
+input_ids
+tensor([[  101,  3120,  1024,  2622,  9535, 11029,   102,  3120,  1024,  7479,
+          1012,  5622,  5677, 29521,  2121,  1012,  2009,  1013,  5746,  8654,
+          2800,  2182,   102,     0,     0,     0,     0,     0,     0,     0,
+             0,     0]])
+torch.Size([1, 32])

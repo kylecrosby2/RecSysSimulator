@@ -1,0 +1,10 @@
+Operation0: Embedding Layer latency: 0.89568 us, and Energy: 0.45865682111999995 uJ
+Operation1: Latency and energy from MUL of X and W_Q: 1.1264000000000003 us and 87.293952 uJ
+Operation3: cap mac QK_T: Latency = 1.1264000000000005 us and Energy = 111.78344448000001 uJ
+Operation softmax: Latency = 2.91566 us and Energy = 11.011634626559973
+Operation5: CAP-MAC Softmax output*V computation:  Latency = 1.1263999999999996 us and Energy = 111.78344447999996 uJ
+Operation6: FET MAC: Multiplication with W_O:  Latency = 1.1263999999999996 us and Energy = 87.293952 uJ
+Operation norm ADD: lat_only_norm_add: 0.7017600000000003 us and en_only_norm_add = 0.2231500800000429 uJ
+Operation7: FET MAC FF1:  Latency = 1.1263999999999996 us and Energy = 349.175808 uJ
+Operation8: FET MAC FF2:  Latency = 1.1263999999999996 us and Energy = 349.175808 uJ
+Operation norm ADD2: latency = 0.7017599999999984 us and energy = 0.7017599999999984 uJ
