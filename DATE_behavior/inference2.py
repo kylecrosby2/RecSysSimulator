@@ -81,7 +81,8 @@ print("Running workload with Capacitor multiplication...")
 cap_lat, cap_en = run_workload(cap_mac, cap_mac_en, is_capacitor=True)
 
 # Output Comparison
-print("\n=== Comparison ===")
+print("\n=== Step 1: ETLU (Embedding Table Lookup and Unify) ===\n")
+print("=== Comparison ===")
 print(f"FET Latency: {fet_lat / 1e3:.2f} ms, Energy: {fet_en / 1e6:.2f} mJ")
 print(f"Capacitor Latency: {cap_lat / 1e3:.2f} ms, Energy: {cap_en / 1e6:.2f} mJ")
 
@@ -90,3 +91,45 @@ en_diff = ((fet_en - cap_en) / max(fet_en, cap_en)) * 100
 
 print(f"Latency Difference: {lat_diff:.2f}%")
 print(f"Energy Difference: {en_diff:.2f}%")
+
+
+
+
+# === Step 2: Nearest Neighbor Search (NNS) ===
+
+def run_stage_2_nns(user_embedding, item_embeddings, k):
+    """
+    Perform Nearest Neighbor Search (NNS) to select top-k candidate items.
+    """
+    print("\n=== Step 2: Nearest Neighbor Search (NNS) ===\n")
+
+    # Step 1: Compute similarities (dot product)
+    similarities = torch.matmul(user_embedding, item_embeddings.T)  # Shape: (1, Ni)
+    print(f"Similarities Shape: {similarities.shape}")
+
+    # Step 2: Select top-k items
+    topk = torch.topk(similarities, k=k, dim=1)
+    topk_indices = topk.indices  # Indices of top-k items
+    topk_similarities = topk.values  # Similarity scores of top-k items
+    print(f"Top-{k} Indices: {topk_indices}")
+    print(f"Top-{k} Similarity Scores: {topk_similarities}")
+
+    # Step 3: Retrieve candidate embeddings
+    candidate_embeddings = item_embeddings[topk_indices.squeeze(0)]  # Shape: (k, d)
+
+    # Memory Analysis
+    candidate_memory = k * d * (qbit // 8)  # In bytes
+    print(f"Candidate Embeddings Memory: {candidate_memory / 1024:.2f} KB")
+    print(f"Candidate Embeddings Shape: {candidate_embeddings.shape}")
+
+    return candidate_embeddings
+
+# Simulated Example for Stage 2 NNS
+user_id = torch.tensor([1234567])  # Example user ID
+user_embedding = user_embedding_table(user_id)  # Fetch user embedding
+item_embeddings = item_embedding_table.weight  # Fetch all item embeddings
+
+candidate_embeddings = run_stage_2_nns(user_embedding, item_embeddings, candidate_items)
+print("\n=== Candidate Embeddings ===")
+print(candidate_embeddings)
+
