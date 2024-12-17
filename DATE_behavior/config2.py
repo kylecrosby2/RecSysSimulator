@@ -8,5 +8,5 @@ sa_rows, sa_cols = 128, 128  # Size of the systolic array
 candidate_items = 100  # Number of candidate items
 
 # Mock latency and energy parameters
-fet_mac_lat, fet_mac_en = 5, 0.2
+fet_mac_lat, fet_mac_en = 5, 5e7
 cap_mac_lat, cap_mac_en = 10, 0.1
